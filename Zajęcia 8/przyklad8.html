@@ -1,0 +1,71 @@
+<html>
+
+<head>
+	<title>Przykład 8</title>
+	<meta charset="utf-8">
+	<style>
+	.hidden { display:none; }</style>
+	<script type="text/javascript">
+		
+
+		function pokazUkryte(id) {
+			let index = id.rowIndex-1;
+			$('#idx_' +index).find('.hidden').toggle();
+			$('th.hidden').show();
+
+		}
+		
+		function pobierzDaneSamochodow() {
+			$.post(
+				"przyklad8.php",
+				function (resp) {
+					var tabela = "<table id='example'>";
+					tabela += "<tr><th>Id</th><th>Marka</th><th>Model</th><th>Rok</th><th></th><th class='hidden'>Pojemnosc</th><th class='hidden'>Typ silnika</th><th class='hidden'>Liczba poduszek</th><th class='hidden'>ABS</th><th class='hidden'>ESP</th></tr>";
+
+
+					$.each(resp, function (i, elem) {
+						tabela += "<tr id='idx_" + i +"'>";
+						tabela += "<td>" + elem.id + "</td>";
+						tabela += "<td>" + elem.marka + "</td>";
+						tabela += "<td>" + elem.model + "</td>";
+						tabela += "<td>" + elem.rok + "</td>";
+						tabela += "<td><a href='#' onclick='pokazUkryte(idx_"+ i +")'>szczegóły</a></td>";
+						tabela += "<td class='hidden'>" + elem.pojemnosc + "</td>";
+						tabela += "<td class='hidden'>" + elem.typ_silnika + "</td>";
+						tabela += "<td class='hidden'>" + elem.liczba_poduszek + "</td>";
+						tabela += "<td class='hidden'>" + elem.abs + "</td>";
+						tabela += "<td class='hidden'>" + elem.esp + "</td>";
+						tabela += "</tr>";
+					});
+
+					tabela += "</table>";
+					$("#wynik").html(tabela);
+				}, "json"
+			);
+		}
+	</script>
+</head>
+
+<body>
+
+	<h2>Przykład 8</h2>
+
+	<h3>Wywołanie AJAX - pobierania danych w formacie JSON</h3>
+
+	<p>
+		<input type="button" name="przycisk" id="przycisk" value="Pobierz dane samochodów" />
+	</p>
+
+	<div id="wynik"></div><br />
+	
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	 crossorigin="anonymous"></script>
+	 <script>
+	 	$(function () {
+			$("#przycisk").click(pobierzDaneSamochodow);
+		});
+	 </script>
+</body>
+
+</html>
